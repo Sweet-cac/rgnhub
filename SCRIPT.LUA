@@ -116,8 +116,8 @@ function AllowRunServiceBind.OnInvoke(args)
     local CoreGui = game:GetService("StarterGui")
     CoreGui:SetCore("SendNotification", {
         Title = "Auto Chest Farm",
-        Text = "By Sweet YT"
-Nhớ Tham Gia Sever Discord Nha Các Bé : .. discordInviteLink,
+        Text = "By Sweet YT
+Nhớ Tham Gia Sever Discord Nha Các Bé" : .. discordInviteLink,
         Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
         Duration = math.huge,
         Callback = AllowRunServiceBind,
@@ -142,7 +142,7 @@ end)
 local CoreGui = game:GetService("StarterGui")
 CoreGui:SetCore("SendNotification", {
     Title = "Auto Chest Farm",
-    Text = "By Sweet YT" 
+    Text = "By Sweet YT 
 Nhớ Tham Gia Sever Discord Nha Các Bé : .. discordInviteLink,
     Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
     Duration = math.huge,
