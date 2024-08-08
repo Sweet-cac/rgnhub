@@ -135,25 +135,48 @@ CoreGui:SetCore("SendNotification", {
     Button2 = "Disable",
 })
 
--- Tạo giao diện gaming với liên kết Discord
+-- Tạo giao diện gaming với liên kết Discord và nút bật/tắt auto farm
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local DiscordButton = Instance.new("TextButton")
+local ToggleButton = Instance.new("TextButton")
+local TitleLabel = Instance.new("TextLabel")
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Frame.Size = UDim2.new(1, 0, 1, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Frame.Size = UDim2.new(0, 400, 0, 300)
+Frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+Frame.BorderSizePixel = 0
+Frame.BackgroundTransparency = 0.3
+
+TitleLabel.Parent = Frame
+TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Size = UDim2.new(1, 0, 0.2, 0)
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.Text = "Auto Farm Script by Vhung hub"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 24
 
 DiscordButton.Parent = Frame
 DiscordButton.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-DiscordButton.Size = UDim2.new(0, 200, 0, 50)
-DiscordButton.Position = UDim2.new(0.5, -100, 0.5, -25)
-DiscordButton.Text = "Join Discord"
+DiscordButton.Size = Udim2.new(0.8, 0, 0.2, 0)
+DiscordButton.Position = UDim2.new(0.1, 0, 0.4, 0)
+DiscordButton.Text = "Join Our Discord"
 DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 DiscordButton.TextSize = 24
 DiscordButton.Font = Enum.Font.SourceSans
+
+ToggleButton.Parent = Frame
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 204, 102)
+ToggleButton.Size = Udim2.new(0.8, 0, 0.2, 0)
+ToggleButton.Position = UDim2.new(0.1, 0, 0.7, 0)
+ToggleButton.Text = "Toggle Auto Farm"
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.TextSize = 24
+ToggleButton.Font = Enum.Font.SourceSans
 
 -- Cập nhật liên kết Discord
 local discordLink = "https://discord.gg/stae"  -- Thay thế bằng liên kết thực tế của bạn
@@ -161,6 +184,18 @@ local discordLink = "https://discord.gg/stae"  -- Thay thế bằng liên kết 
 DiscordButton.MouseButton1Click:Connect(function()
     setclipboard(discordLink)
     print("Discord link copied to clipboard.")
+end)
+
+-- Chức năng bật/tắt auto farm
+ToggleButton.MouseButton1Click:Connect(function()
+    AllowRunService = not AllowRunService
+    if AllowRunService then
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 204, 102)
+        ToggleButton.Text = "Auto Farm Enabled"
+    else
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(204, 0, 0)
+        ToggleButton.Text = "Auto Farm Disabled"
+    end
 end)
 
 -- Auto farm chess
