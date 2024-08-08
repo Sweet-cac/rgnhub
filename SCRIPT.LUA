@@ -1,8 +1,5 @@
--- Khởi tạo các biến và cấu hình
 highChestOnly = true
 godsChalicSniper = false
-local AllowRunService = true
-local veryImportantWaitTime = 0.5
 
 repeat task.wait(4) until game:IsLoaded()
 
@@ -12,6 +9,7 @@ local foundAnything = ""
 local actualHour = os.date("!*t").hour
 local Deleted = false
 
+-- Đọc và ghi tệp JSON
 local File = pcall(function()
     AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
 end)
@@ -35,11 +33,12 @@ function TPReturner()
     end
 
     local num = 0
-    for i, v in pairs(Site.data) do
+    for i,v in pairs(Site.data) do
         local Possible = true
         ID = tostring(v.id)
+
         if tonumber(v.maxPlayers) > tonumber(v.playing) then
-            for _, Existing in pairs(AllIDs) do
+            for _,Existing in pairs(AllIDs) do
                 if num ~= 0 then
                     if ID == tostring(Existing) then
                         Possible = false
@@ -81,60 +80,14 @@ function Teleport()
     end
 end
 
--- Tạo giao diện tùy chỉnh
-local function createUI()
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "CustomUI"
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(0.3, 0, 0.3, 0)
-    Frame.Position = UDim2.new(0.35, 0, 0.35, 0)
-    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Frame.BorderSizePixel = 0
-    Frame.Parent = ScreenGui
-
-    local Title = Instance.new("TextLabel")
-    Title.Size = UDim2.new(1, 0, 0.2, 0)
-    Title.Position = UDim2.new(0, 0, 0, 0)
-    Title.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Text = "ChestFarm"
-    Title.TextScaled = true
-    Title.Parent = Frame
-
-    local ToggleButton = Instance.new("TextButton")
-    ToggleButton.Size = UDim2.new(1, 0, 0.4, 0)
-    ToggleButton.Position = UDim2.new(0, 0, 0.2, 0)
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-    ToggleButton.Text = "On"
-    ToggleButton.TextScaled = true
-    ToggleButton.Parent = Frame
-
-    ToggleButton.MouseButton1Click:Connect(function()
-        if AllowRunService then
-            AllowRunService = false
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-            ToggleButton.Text = "Off"
-        else
-            AllowRunService = true
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-            ToggleButton.Text = "On"
-        end
-    end)
-end
-
-createUI()
-
--- Giám sát lỗi và tự động chạy lại
+local veryImportantWaitTime = 0.5
 task.spawn(function()
     while task.wait(veryImportantWaitTime) do
         pcall(function()
-            for i, v in pairs(game.CoreGui:GetDescendants()) do
+            for i,v in pairs(game.CoreGui:GetDescendants()) do
                 pcall(function()
-                    if string.find(v.Name, "ErrorMessage") then
-                        if string.find(v.Text, "Security kick") then
+                    if string.find(v.Name,"ErrorMessage") then
+                        if string.find(v.Text,"Security kick") then
                             veryImportantWaitTime = 1e9
                             Teleport()
                         end
@@ -144,6 +97,28 @@ task.spawn(function()
         end)
     end
 end)
+
+local AllowRunService = true
+local AllowRunServiceBind = Instance.new("BindableFunction")
+
+function AllowRunServiceBind.OnInvoke(args)
+    if args == "Enable" then
+        AllowRunService = true
+    elseif args == "Disable" then
+        AllowRunService = false
+    end
+
+    local CoreGui = game:GetService("StarterGui")
+    CoreGui:SetCore("SendNotification", {
+        Title = "kaymobile",
+        Text = "By Kay hub\nJoin our Discord: [Your Discord Link Here]",
+        Icon = "rbxthumb://type=Asset&id=18826502436&w=150&h=150",
+        Duration = math.huge,
+        Callback = AllowRunServiceBind,
+        Button1 = "Enable",
+        Button2 = "Disable",
+    })
+end
 
 task.spawn(function()
     while task.wait() do
@@ -157,8 +132,19 @@ task.spawn(function()
     end
 end)
 
+local CoreGui = game:GetService("StarterGui")
+CoreGui:SetCore("SendNotification", {
+    Title = "ChestFarm",
+    Text = "By Vhung hub\nJoin our Discord: [Your Discord Link Here]",
+    Icon = "rbxthumb://type=Asset&id=18826502436&w=150&h=150",
+    Duration = math.huge,
+    Callback = AllowRunServiceBind,
+    Button1 = "Enable",
+    Button2 = "Disable",
+})
+
 task.spawn(function()
-    while true and task.wait(0.5) do
+    while true and task.wait(.5) do
         if AllowRunService == true then
             local ohString1 = "SetTeam"
             local ohString2 = "Marines"
@@ -173,7 +159,7 @@ task.spawn(function()
             if highChestOnly == false then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- Không có nhân vật, có thể làm gì đó ở đây
+                    -- Your existing code here
                 else
                     local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
                     if hasCrewTag then hasCrewTag:Destroy() end
@@ -192,7 +178,7 @@ task.spawn(function()
             elseif highChestOnly == true then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- Không có nhân vật, có thể làm gì đó ở đây
+                    -- Your existing code here
                 else
                     local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
                     if hasCrewTag then hasCrewTag:Destroy() end
