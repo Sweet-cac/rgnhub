@@ -1,6 +1,5 @@
--- Các thiết lập và biến gốc
-local highChestOnly = true
-local godsChalicSniper = false
+highChestOnly = true
+godsChalicSniper = false
 
 repeat task.wait(4) until game:IsLoaded()
 
@@ -10,7 +9,6 @@ local foundAnything = ""
 local actualHour = os.date("!*t").hour
 local Deleted = false
 
--- Đọc danh sách server từ file
 local File = pcall(function()
     AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
 end)
@@ -20,7 +18,6 @@ if not File then
     writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
 end
 
--- Hàm quay lại teleport
 function TPReturner()
     local Site
     if foundAnything == "" then
@@ -38,6 +35,7 @@ function TPReturner()
     for i, v in pairs(Site.data) do
         local Possible = true
         ID = tostring(v.id)
+
         if tonumber(v.maxPlayers) > tonumber(v.playing) then
             for _, Existing in pairs(AllIDs) do
                 if num ~= 0 then
@@ -55,6 +53,7 @@ function TPReturner()
                 end
                 num = num + 1
             end
+
             if Possible == true then
                 table.insert(AllIDs, ID)
                 wait()
@@ -69,7 +68,6 @@ function TPReturner()
     end
 end
 
--- Hàm teleport
 function Teleport()
     while wait() do
         pcall(function()
@@ -81,8 +79,8 @@ function Teleport()
     end
 end
 
--- Xử lý thông báo lỗi bảo mật
 local veryImportantWaitTime = 0.5
+
 task.spawn(function()
     while task.wait(veryImportantWaitTime) do
         pcall(function()
@@ -100,7 +98,6 @@ task.spawn(function()
     end
 end)
 
--- Điều khiển việc bật/tắt auto farm
 local AllowRunService = true
 local AllowRunServiceBind = Instance.new("BindableFunction")
 
@@ -110,12 +107,11 @@ function AllowRunServiceBind.OnInvoke(args)
     elseif args == "Disable" then
         AllowRunService = false
     end
-
     local CoreGui = game:GetService("StarterGui")
     CoreGui:SetCore("SendNotification", {
-        Title = "Auto Farm Chess",
-        Text = "By Sweet Hub",
-        Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
+        Title = "ChestFarm",
+        Text = "By Lâm hub",
+        Icon = "rbxthumb://type=Asset&id=18826502436&w=150&h=150",
         Duration = math.huge,
         Callback = AllowRunServiceBind,
         Button1 = "Enable",
@@ -123,11 +119,22 @@ function AllowRunServiceBind.OnInvoke(args)
     })
 end
 
--- Thông báo khởi tạo
+task.spawn(function()
+    while task.wait() do
+        task.spawn(function()
+            if godsChalicSniper == true then
+                if stuff then
+                    AllowRunService = false
+                end
+            end
+        end)
+    end
+end)
+
 local CoreGui = game:GetService("StarterGui")
 CoreGui:SetCore("SendNotification", {
-    Title = "Auto Farm Chess",
-    Text = "By Sweet Hub",
+    Title = "ChestFarm",
+    Text = "By Lâm hub",
     Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
     Duration = math.huge,
     Callback = AllowRunServiceBind,
@@ -135,72 +142,23 @@ CoreGui:SetCore("SendNotification", {
     Button2 = "Disable",
 })
 
--- Tạo giao diện gaming với liên kết Discord và nút bật/tắt auto farm
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local DiscordButton = Instance.new("TextButton")
-local ToggleButton = Instance.new("TextButton")
-local TitleLabel = Instance.new("TextLabel")
+-- Thêm đoạn mã lời mời Discord vào đây
+local BindableFunction = Instance.new("BindableFunction")
+BindableFunction.OnInvoke = function()
+    setclipboard("https://discord.gg/stae") -- Thay "your-invite-code" bằng mã mời Discord của bạn
+end
 
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+CoreGui:SetCore("SendNotification", {
+    Title = "Join Us on Discord!",
+    Text = "Click to join our community.",
+    Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150", -- Bạn có thể thay đổi ID ảnh để phù hợp với server của bạn
+    Duration = 10,
+    Callback = BindableFunction,
+    Button1 = "Join",
+})
 
-Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-Frame.Size = UDim2.new(0, 400, 0, 300)
-Frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-Frame.BorderSizePixel = 0
-Frame.BackgroundTransparency = 0.3
-
-TitleLabel.Parent = Frame
-TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Size = UDim2.new(1, 0, 0.2, 0)
-TitleLabel.Font = Enum.Font.SourceSansBold
-TitleLabel.Text = "Auto Farm Script by Sweet Hub"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 24
-
-DiscordButton.Parent = Frame
-DiscordButton.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-DiscordButton.Size = UDim2.new(0.8, 0, 0.2, 0)
-DiscordButton.Position = UDim2.new(0.1, 0, 0.4, 0)
-DiscordButton.Text = "Join Our Discord"
-DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-DiscordButton.TextSize = 24
-DiscordButton.Font = Enum.Font.SourceSans
-
-ToggleButton.Parent = Frame
-ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 204, 102)
-ToggleButton.Size = UDim2.new(0.8, 0, 0.2, 0)
-ToggleButton.Position = UDim2.new(0.1, 0, 0.7, 0)
-ToggleButton.Text = "Toggle Auto Farm"
-ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleButton.TextSize = 24
-ToggleButton.Font = Enum.Font.SourceSans
-
--- Cập nhật liên kết Discord
-local discordLink = "https://discord.gg/stae"  -- Thay thế bằng liên kết thực tế của bạn
-
-DiscordButton.MouseButton1Click:Connect(function()
-    setclipboard(discordLink)
-    print("Discord link copied to clipboard.")
-end)
-
--- Chức năng bật/tắt auto farm
-ToggleButton.MouseButton1Click:Connect(function()
-    AllowRunService = not AllowRunService
-    if AllowRunService then
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 204, 102)
-        ToggleButton.Text = "Auto Farm Enabled"
-    else
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(204, 0, 0)
-        ToggleButton.Text = "Auto Farm Disabled"
-    end
-end)
-
--- Auto farm chess
 task.spawn(function()
-    while true and task.wait(0.5) do
+    while true and task.wait(.5) do
         if AllowRunService == true then
             local ohString1 = "SetTeam"
             local ohString2 = "Marines"
@@ -215,8 +173,6 @@ task.spawn(function()
             if highChestOnly == false then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- Do nothing
-                else
                     local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
                     if hasCrewTag then hasCrewTag:Destroy() end
                     local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
@@ -234,7 +190,6 @@ task.spawn(function()
             elseif highChestOnly == true then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- Do nothing
                 else
                     local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
                     if hasCrewTag then hasCrewTag:Destroy() end
