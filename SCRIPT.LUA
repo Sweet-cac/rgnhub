@@ -1,5 +1,3 @@
-
-CodeScript.lua
 highChestOnly = true
 
 godsChalicSniper = false
