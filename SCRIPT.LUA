@@ -1,19 +1,16 @@
 highChestOnly = true
 godsChalicSniper = false
-local discordInviteLink = "https://discord.gg/stae"  -- Thay YOUR_INVITE_CODE bằng mã mời của bạn
 
 repeat task.wait(4) until game:IsLoaded()
 
 local PlaceID = game.PlaceId
-
 local AllIDs = {}
-
 local foundAnything = ""
-
 local actualHour = os.date("!*t").hour
-
 local Deleted = false
+local discordInviteLink = "https://discord.gg/stae"  -- Thay đổi theo liên kết mời của bạn
 
+-- Đọc và ghi dữ liệu
 local File = pcall(function()
     AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
 end)
@@ -23,6 +20,7 @@ if not File then
     writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
 end
 
+-- Hàm teleport
 function TPReturner()
     local Site
     if foundAnything == "" then
@@ -37,12 +35,11 @@ function TPReturner()
     end
 
     local num = 0
-    for i, v in pairs(Site.data) do
+    for i,v in pairs(Site.data) do
         local Possible = true
         ID = tostring(v.id)
-
         if tonumber(v.maxPlayers) > tonumber(v.playing) then
-            for _, Existing in pairs(AllIDs) do
+            for _,Existing in pairs(AllIDs) do
                 if num ~= 0 then
                     if ID == tostring(Existing) then
                         Possible = false
@@ -73,6 +70,7 @@ function TPReturner()
     end
 end
 
+-- Hàm teleport liên tục
 function Teleport()
     while wait() do
         pcall(function()
@@ -84,15 +82,15 @@ function Teleport()
     end
 end
 
+-- Kiểm tra lỗi và retry teleport
 local veryImportantWaitTime = 0.5
-
 task.spawn(function()
     while task.wait(veryImportantWaitTime) do
         pcall(function()
-            for i, v in pairs(game.CoreGui:GetDescendants()) do
+            for i,v in pairs(game.CoreGui:GetDescendants()) do
                 pcall(function()
-                    if string.find(v.Name, "ErrorMessage") then
-                        if string.find(v.Text, "Security kick") then
+                    if string.find(v.Name,"ErrorMessage") then
+                        if string.find(v.Text,"Security kick") then
                             veryImportantWaitTime = 1e9
                             Teleport()
                         end
@@ -103,6 +101,7 @@ task.spawn(function()
     end
 end)
 
+-- Cài đặt điều khiển UI
 local AllowRunService = true
 local AllowRunServiceBind = Instance.new("BindableFunction")
 
@@ -115,41 +114,29 @@ function AllowRunServiceBind.OnInvoke(args)
 
     local CoreGui = game:GetService("StarterGui")
     CoreGui:SetCore("SendNotification", {
-        Title = "Auto Chest Farm",
-        Text = "By Sweet YT" : .. discordInviteLink,
+        Title = "Chest Farm",
+        Text = "By Sweet YT " .. discordInviteLink,
         Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
         Duration = math.huge,
         Callback = AllowRunServiceBind,
         Button1 = "ON",
         Button2 = "OFF",
-        Button3 = "Toggle White Screen",
     })
 end
 
-task.spawn(function()
-    while task.wait() do
-        task.spawn(function()
-            if godsChalicSniper == true then
-                if stuff then
-                    AllowRunService = false
-                end
-            end
-        end)
-    end
-end)
-
+-- Thông báo ban đầu
 local CoreGui = game:GetService("StarterGui")
 CoreGui:SetCore("SendNotification", {
-    Title = "Auto Chest Farm",
-    Text = "By Sweet YT": .. discordInviteLink,
+    Title = "ChestFarm",
+    Text = "By Sweet YT " .. discordInviteLink,
     Icon = "rbxthumb://type=Asset&id=18856351865&w=150&h=150",
     Duration = math.huge,
     Callback = AllowRunServiceBind,
     Button1 = "ON",
     Button2 = "OFF",
-    Button3 = "Toggle White Screen",
 })
 
+-- Chạy vòng lặp kiểm tra
 task.spawn(function()
     while true and task.wait(.5) do
         if AllowRunService == true then
@@ -160,15 +147,16 @@ task.spawn(function()
     end
 end)
 
+-- Xử lý chest
 task.spawn(function()
     while true and task.wait() do
         if AllowRunService == true then
             if highChestOnly == false then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- No action needed
+                    -- (Mã mã hóa)
                 else
-                    local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
+                    local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
                     if hasCrewTag then hasCrewTag:Destroy() end
 
                     local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
@@ -176,7 +164,7 @@ task.spawn(function()
                         local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2") or game.Workspace:FindFirstChild("Chest1") or game.Workspace:FindFirstChild("Chest")
                         if Chest then
                             game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
-                            firesignal(Chest.Touched, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                         else
                             Teleport()
                             break
@@ -186,9 +174,9 @@ task.spawn(function()
             elseif highChestOnly == true then
                 local hasChar = game.Players.LocalPlayer:FindFirstChild("Character")
                 if not game.Players.LocalPlayer.Character then
-                    -- No action needed
+                    -- (Mã mã hóa)
                 else
-                    local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG", true)
+                    local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
                     if hasCrewTag then hasCrewTag:Destroy() end
 
                     local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
@@ -196,7 +184,7 @@ task.spawn(function()
                         local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2")
                         if Chest then
                             game.Players.LocalPlayer.Character:PivotTo(Chest:GetPivot())
-                            firesignal(Chest.Touched, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            firesignal(Chest.Touched,game.Players.LocalPlayer.Character.HumanoidRootPart)
                         else
                             Teleport()
                             break
