@@ -156,13 +156,13 @@ TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Size = UDim2.new(1, 0, 0.2, 0)
 TitleLabel.Font = Enum.Font.SourceSansBold
-TitleLabel.Text = "Auto Farm Script by Vhung hub"
+TitleLabel.Text = "Auto Farm Script by Sweet Hub"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleLabel.TextSize = 24
 
 DiscordButton.Parent = Frame
 DiscordButton.BackgroundColor3 = Color3.fromRGB(0, 122, 204)
-DiscordButton.Size = Udim2.new(0.8, 0, 0.2, 0)
+DiscordButton.Size = UDim2.new(0.8, 0, 0.2, 0)
 DiscordButton.Position = UDim2.new(0.1, 0, 0.4, 0)
 DiscordButton.Text = "Join Our Discord"
 DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -171,7 +171,7 @@ DiscordButton.Font = Enum.Font.SourceSans
 
 ToggleButton.Parent = Frame
 ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 204, 102)
-ToggleButton.Size = Udim2.new(0.8, 0, 0.2, 0)
+ToggleButton.Size = UDim2.new(0.8, 0, 0.2, 0)
 ToggleButton.Position = UDim2.new(0.1, 0, 0.7, 0)
 ToggleButton.Text = "Toggle Auto Farm"
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
