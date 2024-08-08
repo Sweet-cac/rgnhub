@@ -1,2 +1,2 @@
-# rgnhub
+# sweet hub
 chuyên auto roll
