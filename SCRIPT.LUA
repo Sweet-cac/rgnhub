@@ -1,6 +1,7 @@
 -- Các biến và cài đặt ban đầu
 highChestOnly = true
 godsChalicSniper = false
+local isScreenOn = true -- True = chế độ màn hình hoạt động, False = chế độ màn hình trắng hoặc đen
 
 repeat task.wait(4) until game:IsLoaded()
 
@@ -19,6 +20,34 @@ end)
 if not File then
     table.insert(AllIDs, actualHour)
     writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+end
+
+-- Hàm toggle chế độ màn hình
+function ToggleScreenMode(on)
+    isScreenOn = on
+    local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    -- Xóa các UI cũ nếu có
+    for _, child in pairs(playerGui:GetChildren()) do
+        if child:IsA("ScreenGui") and child.Name == "ScreenModeGui" then
+            child:Destroy()
+        end
+    end
+
+    if isScreenOn then
+        -- Khôi phục giao diện người dùng bình thường nếu có
+        -- (Bạn có thể thêm mã khôi phục UI ở đây nếu cần)
+    else
+        -- Tạo UI mới với màn hình trắng hoặc đen
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "ScreenModeGui"
+        screenGui.Parent = playerGui
+
+        local frame = Instance.new("Frame")
+        frame.Size = UDim2.new(1, 0, 1, 0)
+        frame.BackgroundColor3 = Color3.new(1, 1, 1) -- Màu trắng, thay đổi thành Color3.new(0, 0, 0) cho màu đen
+        frame.Parent = screenGui
+    end
 end
 
 -- Hàm teleport
@@ -109,8 +138,17 @@ local AllowRunServiceBind = Instance.new("BindableFunction")
 function AllowRunServiceBind.OnInvoke(args)
     if args == "ON" then
         AllowRunService = true
+        ToggleScreenMode(true)
     elseif args == "OFF" then
         AllowRunService = false
+        ToggleScreenMode(false)
+    elseif args == "ToggleScreen" then
+        -- Chuyển đổi giữa chế độ màn hình trắng và đen
+        if isScreenOn then
+            ToggleScreenMode(false)
+        else
+            ToggleScreenMode(true)
+        end
     end
 
     local CoreGui = game:GetService("StarterGui")
@@ -122,6 +160,7 @@ function AllowRunServiceBind.OnInvoke(args)
         Callback = AllowRunServiceBind,
         Button1 = "ON",
         Button2 = "OFF",
+        Button3 = "Toggle Screen",
     })
 end
 
@@ -135,6 +174,7 @@ CoreGui:SetCore("SendNotification", {
     Callback = AllowRunServiceBind,
     Button1 = "ON",
     Button2 = "OFF",
+    Button3 = "Toggle Screen",
 })
 
 -- Chạy vòng lặp kiểm tra
@@ -180,7 +220,7 @@ task.spawn(function()
                     local hasCrewTag = game.Players.LocalPlayer.Character:FindFirstChild("CrewBBG",true)
                     if hasCrewTag then hasCrewTag:Destroy() end
 
-                    local hasHumanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+                    local hasHumanoid = game.Players.LocalPlayer:FindFirstChild("Humanoid")
                     if hasHumanoid then
                         local Chest = game.Workspace:FindFirstChild("Chest4") or game.Workspace:FindFirstChild("Chest3") or game.Workspace:FindFirstChild("Chest2")
                         if Chest then
